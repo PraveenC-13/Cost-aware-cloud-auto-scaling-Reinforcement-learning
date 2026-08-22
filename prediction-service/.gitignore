@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+saved_models/*.h5
+saved_models/*.pkl
+.env
+.DS_Store
+.idea/
+.vscode/
+notebooks/.ipynb_checkpoints/
