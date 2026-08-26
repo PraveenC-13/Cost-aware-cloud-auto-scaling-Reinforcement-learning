@@ -1,0 +1,43 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: backend-api
+
+  # Default profile: in-memory H2, zero setup - good for `mvn spring-boot:run`
+  # on your own laptop before docker-compose / Postgres is wired up.
+  datasource:
+    url: jdbc:h2:mem:autoscaler;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    open-in-view: false
+
+autoscaler:
+  docker:
+    compose-file: ${DOCKER_COMPOSE_FILE:infra/docker-compose.yml}
+
+---
+# Activate with: SPRING_PROFILES_ACTIVE=postgres
+spring:
+  config:
+    activate:
+      on-profile: postgres
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:autoscaler}
+    username: ${DB_USER:autoscaler}
+    password: ${DB_PASSWORD:autoscaler}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
